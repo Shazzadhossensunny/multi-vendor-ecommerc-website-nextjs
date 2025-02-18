@@ -58,11 +58,11 @@ export default function LoginForm() {
 
       {/* Social Login Buttons */}
       <div className="grid grid-cols-2 gap-4">
-        <Button variant="outline" className="w-full" type="button">
+        <Button variant="outline" className="w-full font-heading" type="button">
           <Github className="mr-2 h-4 w-4" />
           GitHub
         </Button>
-        <Button variant="outline" className="w-full" type="button">
+        <Button variant="outline" className="w-full font-heading" type="button">
           <Mail className="mr-2 h-4 w-4" />
           Google
         </Button>
@@ -73,7 +73,7 @@ export default function LoginForm() {
           <Separator className="w-full" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
+          <span className="bg-card px-2 text-muted-foreground font-heading">
             Or continue with
           </span>
         </div>
@@ -85,7 +85,7 @@ export default function LoginForm() {
             control={form.control}
             name="email"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="font-sans">
                 <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
@@ -103,7 +103,7 @@ export default function LoginForm() {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="font-sans">
                 <FormLabel>Password</FormLabel>
                 <FormControl>
                   <Input
@@ -129,7 +129,7 @@ export default function LoginForm() {
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <FormLabel className="text-sm font-normal cursor-pointer">
+                  <FormLabel className="text-sm font-normal cursor-pointer font-sans">
                     Remember me
                   </FormLabel>
                 </FormItem>
@@ -137,25 +137,25 @@ export default function LoginForm() {
             />
             <a
               href="/forgot-password"
-              className="text-sm font-medium text-primary hover:underline"
+              className="text-sm font-medium text-primary hover:underline font-sans"
             >
               Forgot password?
             </a>
           </div>
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full font-heading">
             Sign In
           </Button>
         </form>
       </Form>
 
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-sm text-muted-foreground font-sans">
         Don't have an account?{" "}
         <a
           href="/register"
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-primary hover:underline font-heading"
         >
-          Sign up
+          Register
         </a>
       </div>
     </div>

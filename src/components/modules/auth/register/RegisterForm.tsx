@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,31 +15,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Github, Mail } from "lucide-react";
-
-// Define validation schema
-const formSchema = z
-  .object({
-    name: z.string().min(2, {
-      message: "Name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-    }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
-
-type FormValues = z.infer<typeof formSchema>;
+import { registerValidationSchema } from "./registerValidation";
 
 export default function RegistrationForm() {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    resolver: zodResolver(registerValidationSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -49,26 +28,31 @@ export default function RegistrationForm() {
     },
   });
 
-  function onSubmit(values: FormValues) {
-    // This would typically be where you would integrate with your authentication service
-    console.log(values);
-    form.reset();
-  }
+  const password = form.watch("password");
+  const confirmPassword = form.watch("confirmPassword");
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+  };
 
   return (
     <div className="max-w-md w-full mx-auto p-6 space-y-8 bg-card rounded-lg shadow-md">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-primary">Create an Account</h2>
-        <p className="text-muted-foreground mt-2">Sign up to join TradeNexus</p>
+        <h2 className="text-2xl font-bold text-primary font-heading">
+          Create an Account
+        </h2>
+        <p className="text-muted-foreground mt-2 font-heading">
+          Sign up to join TradeNexus
+        </p>
       </div>
 
       {/* Social Login Buttons */}
       <div className="grid grid-cols-2 gap-4">
-        <Button variant="outline" className="w-full" type="button">
+        <Button variant="outline" className="w-full font-heading" type="button">
           <Github className="mr-2 h-4 w-4" />
           GitHub
         </Button>
-        <Button variant="outline" className="w-full" type="button">
+        <Button variant="outline" className="w-full font-heading" type="button">
           <Mail className="mr-2 h-4 w-4" />
           Google
         </Button>
@@ -79,14 +63,17 @@ export default function RegistrationForm() {
           <Separator className="w-full" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-card px-2 text-muted-foreground">
+          <span className="bg-card px-2 text-muted-foreground font-sans">
             Or continue with
           </span>
         </div>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-6 font-sans"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -132,7 +119,7 @@ export default function RegistrationForm() {
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>At least 8 characters</FormDescription>
+                <FormDescription>At least 6 characters</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -151,20 +138,31 @@ export default function RegistrationForm() {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                {confirmPassword && password !== confirmPassword ? (
+                  <FormMessage>Password doesn't match!</FormMessage>
+                ) : (
+                  <FormMessage />
+                )}
               </FormItem>
             )}
           />
 
-          <Button type="submit" className="w-full">
+          <Button
+            disabled={!!confirmPassword && password !== confirmPassword}
+            type="submit"
+            className="w-full font-heading"
+          >
             Create Account
           </Button>
         </form>
       </Form>
 
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-sm text-muted-foreground font-sans">
         Already have an account?{" "}
-        <a href="/login" className="font-medium text-primary hover:underline">
+        <a
+          href="/login"
+          className="font-medium text-primary hover:underline font-heading"
+        >
           Login in
         </a>
       </div>
