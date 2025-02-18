@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,50 +14,46 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Github, Mail } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Define validation schema
-const formSchema = z
-  .object({
-    name: z.string().min(2, {
-      message: "Name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z.string().min(8, {
-      message: "Password must be at least 8 characters.",
-    }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  password: z.string().min(1, {
+    message: "Password is required.",
+  }),
+  rememberMe: z.boolean().default(false),
+});
 
 type FormValues = z.infer<typeof formSchema>;
 
-export default function RegistrationForm() {
+export default function LoginForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      rememberMe: false,
     },
   });
 
   function onSubmit(values: FormValues) {
     // This would typically be where you would integrate with your authentication service
     console.log(values);
-    form.reset();
+    form.reset({ email: "", password: "", rememberMe: false });
   }
 
   return (
     <div className="max-w-md w-full mx-auto p-6 space-y-8 bg-card rounded-lg shadow-md">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-primary">Create an Account</h2>
-        <p className="text-muted-foreground mt-2">Sign up to join TradeNexus</p>
+        <h2 className="text-2xl font-bold text-primary font-heading">
+          Welcome Back
+        </h2>
+        <p className="text-muted-foreground mt-2 font-heading">
+          Sign in to your account
+        </p>
       </div>
 
       {/* Social Login Buttons */}
@@ -89,20 +83,6 @@ export default function RegistrationForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Full Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your full name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
@@ -128,44 +108,54 @@ export default function RegistrationForm() {
                 <FormControl>
                   <Input
                     type="password"
-                    placeholder="Create a password"
+                    placeholder="Enter your password"
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>At least 8 characters</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input
-                    type="password"
-                    placeholder="Confirm your password"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="flex items-center justify-between">
+            <FormField
+              control={form.control}
+              name="rememberMe"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel className="text-sm font-normal cursor-pointer">
+                    Remember me
+                  </FormLabel>
+                </FormItem>
+              )}
+            />
+            <a
+              href="/forgot-password"
+              className="text-sm font-medium text-primary hover:underline"
+            >
+              Forgot password?
+            </a>
+          </div>
 
           <Button type="submit" className="w-full">
-            Create Account
+            Sign In
           </Button>
         </form>
       </Form>
 
       <div className="text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
-        <a href="/login" className="font-medium text-primary hover:underline">
-          Login in
+        Don't have an account?{" "}
+        <a
+          href="/register"
+          className="font-medium text-primary hover:underline"
+        >
+          Sign up
         </a>
       </div>
     </div>
