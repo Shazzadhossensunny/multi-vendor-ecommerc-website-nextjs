@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
+import Providers from "@/providers/Providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,11 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${poppins.variable}`}>
-        {children}
-        <Toaster richColors position="top-center" />
-      </body>
-    </html>
+    <Providers>
+      <html lang="en">
+        <body className={`${inter.variable} ${poppins.variable}`}>
+          {children}
+          <Toaster richColors position="top-center" />
+        </body>
+      </html>
+    </Providers>
   );
 }
