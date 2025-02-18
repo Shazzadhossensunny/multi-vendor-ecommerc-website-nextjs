@@ -19,6 +19,7 @@ import { loginValidationSchema } from "./loginValidation";
 import { loginUser } from "@/services/AuthService";
 import { toast } from "sonner";
 import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
@@ -44,6 +45,10 @@ export default function LoginForm() {
     }
     setLoading(false);
     form.reset();
+  };
+
+  const handleRecaptha = (value: string | null) => {
+    console.log(value);
   };
 
   return (
@@ -143,6 +148,12 @@ export default function LoginForm() {
               Forgot password?
             </a>
           </div> */}
+          <div className="flex justify-center">
+            <ReCAPTCHA
+              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY!}
+              onChange={handleRecaptha}
+            />
+          </div>
 
           <Button
             disabled={loading}
