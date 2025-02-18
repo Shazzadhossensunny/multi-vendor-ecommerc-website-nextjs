@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -14,10 +14,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Github, Mail } from "lucide-react";
+import { Github, Loader2, Mail } from "lucide-react";
 import { registerValidationSchema } from "./registerValidation";
+import { toast } from "sonner";
+import { registerUser } from "@/services/AuthService";
 
 export default function RegistrationForm() {
+  const [loading, setLoading] = useState(false);
   const form = useForm({
     resolver: zodResolver(registerValidationSchema),
     defaultValues: {
@@ -27,12 +30,23 @@ export default function RegistrationForm() {
       confirmPassword: "",
     },
   });
-
   const password = form.watch("password");
   const confirmPassword = form.watch("confirmPassword");
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setLoading(true);
+    try {
+      const res = await registerUser(data);
+      if (res?.success) {
+        toast.success(res?.message);
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      toast.error(error as any);
+    }
+    setLoading(false);
+    form.reset();
   };
 
   return (
@@ -148,11 +162,17 @@ export default function RegistrationForm() {
           />
 
           <Button
-            disabled={!!confirmPassword && password !== confirmPassword}
+            disabled={
+              loading || (!!confirmPassword && password !== confirmPassword)
+            }
             type="submit"
             className="w-full font-heading"
           >
-            Create Account
+            {loading ? (
+              <Loader2 className="animate-spin h-5 w-5 mx-auto" />
+            ) : (
+              "Create Account"
+            )}
           </Button>
         </form>
       </Form>
