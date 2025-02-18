@@ -16,13 +16,14 @@ import { Separator } from "@/components/ui/separator";
 import { Github, Loader2, Mail } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { loginValidationSchema } from "./loginValidation";
-import { loginUser } from "@/services/AuthService";
+import { loginUser, reCaptchaTokenVerification } from "@/services/AuthService";
 import { toast } from "sonner";
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
+  const [reCaptchaStatus, setReCaptchaStatus] = useState(false);
   const form = useForm({
     resolver: zodResolver(loginValidationSchema),
     defaultValues: {
@@ -47,8 +48,15 @@ export default function LoginForm() {
     form.reset();
   };
 
-  const handleRecaptha = (value: string | null) => {
-    console.log(value);
+  const handleRecaptcha = async (value: string | null) => {
+    try {
+      const res = await reCaptchaTokenVerification(value!);
+      if (res?.success) {
+        setReCaptchaStatus(true);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
   };
 
   return (
@@ -151,12 +159,12 @@ export default function LoginForm() {
           <div className="flex justify-center">
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY!}
-              onChange={handleRecaptha}
+              onChange={handleRecaptcha}
             />
           </div>
 
           <Button
-            disabled={loading}
+            disabled={loading || reCaptchaStatus ? false : true}
             type="submit"
             className="w-full font-heading"
           >
