@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -13,37 +13,38 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Github, Mail } from "lucide-react";
+import { Github, Loader2, Mail } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-
-// Define validation schema
-const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }),
-  password: z.string().min(1, {
-    message: "Password is required.",
-  }),
-  rememberMe: z.boolean().default(false),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { loginValidationSchema } from "./loginValidation";
+import { loginUser } from "@/services/AuthService";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function LoginForm() {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const [loading, setLoading] = useState(false);
+  const form = useForm({
+    resolver: zodResolver(loginValidationSchema),
     defaultValues: {
       email: "",
       password: "",
-      rememberMe: false,
     },
   });
 
-  function onSubmit(values: FormValues) {
-    // This would typically be where you would integrate with your authentication service
-    console.log(values);
-    form.reset({ email: "", password: "", rememberMe: false });
-  }
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    setLoading(true);
+    try {
+      const res = await loginUser(data);
+      if (res?.success) {
+        toast.success(res?.message);
+      } else {
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      toast.error(error as any);
+    }
+    setLoading(false);
+    form.reset();
+  };
 
   return (
     <div className="max-w-md w-full mx-auto p-6 space-y-8 bg-card rounded-lg shadow-md">
@@ -117,7 +118,7 @@ export default function LoginForm() {
             )}
           />
 
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <FormField
               control={form.control}
               name="rememberMe"
@@ -141,10 +142,18 @@ export default function LoginForm() {
             >
               Forgot password?
             </a>
-          </div>
+          </div> */}
 
-          <Button type="submit" className="w-full font-heading">
-            Sign In
+          <Button
+            disabled={loading}
+            type="submit"
+            className="w-full font-heading"
+          >
+            {loading ? (
+              <Loader2 className="animate-spin h-5 w-5 mx-auto" />
+            ) : (
+              "Log In"
+            )}
           </Button>
         </form>
       </Form>
