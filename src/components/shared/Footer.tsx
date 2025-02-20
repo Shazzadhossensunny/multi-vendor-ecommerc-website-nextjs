@@ -12,11 +12,11 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-2xl">
                 T
               </div>
-              <span className="text-primary font-heading font-bold text-2xl">
+              <span className="text-primary font-bold text-2xl font-heading">
                 TradeNexus
               </span>
             </div>
-            <p className="text-foreground max-w-xs">
+            <p className="text-foreground max-w-xs font-sans">
               TradeNexus connects buyers and sellers in a trusted marketplace,
               offering high-quality products from verified vendors worldwide.
             </p>
@@ -44,12 +44,14 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-primary">Quick Links</h3>
+            <h3 className="text-lg font-semibold text-primary font-heading">
+              Quick Links
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   Home
                 </Link>
@@ -57,7 +59,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/shop"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   Shop
                 </Link>
@@ -65,7 +67,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/add-product"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   Add Product
                 </Link>
@@ -73,7 +75,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/about"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   About Us
                 </Link>
@@ -83,12 +85,14 @@ const Footer = () => {
 
           {/* More Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-primary">More</h3>
+            <h3 className="text-lg font-semibold text-primary font-heading">
+              More
+            </h3>
             <ul className="space-y-2">
               <li>
                 <Link
                   href="/testimonials"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   Testimonials
                 </Link>
@@ -96,7 +100,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/blog"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   Blog
                 </Link>
@@ -104,7 +108,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/contact"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   Contact
                 </Link>
@@ -112,7 +116,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/faq"
-                  className="text-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors font-sans"
                 >
                   FAQ
                 </Link>
@@ -122,25 +126,28 @@ const Footer = () => {
 
           {/* Contact Info - Hidden on Mobile */}
           <div className="space-y-4 hidden md:block">
-            <h3 className="text-lg font-semibold text-primary">Contact</h3>
+            <h3 className="text-lg font-semibold text-primary font-heading">
+              Contact
+            </h3>
             <ul className="space-y-2">
               <li className="text-foreground">
-                <span className="font-medium">Email:</span>{" "}
+                <span className="font-medium font-sans">Email:</span>{" "}
                 contact@tradenexus.com
               </li>
               <li className="text-foreground">
-                <span className="font-medium">Phone:</span> +1 (555) 123-4567
+                <span className="font-medium font-sans">Phone:</span> +1 (555)
+                123-4567
               </li>
               <li className="text-foreground">
-                <span className="font-medium">Address:</span> 1234 Market St,
-                Suite 100, San Francisco, CA 94103
+                <span className="font-medium font-sans">Address:</span> 1234
+                Market St, Suite 100, San Francisco, CA 94103
               </li>
             </ul>
           </div>
         </div>
 
         {/* Bottom Section with Copyright */}
-        <div className="mt-12 pt-8 border-t border-border">
+        <div className="mt-12 pt-8 border-t border-border font-sans">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-foreground text-sm">
               &copy; {new Date().getFullYear()} TradeNexus. All rights reserved.
